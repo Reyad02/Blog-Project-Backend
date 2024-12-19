@@ -2,6 +2,8 @@ import httpStatus from 'http-status';
 import AppError from '../../errors/AppErros';
 import { User } from '../user/user.model';
 import { TAuthUser } from './auth.interface';
+import { createToken } from './auth.utils';
+import config from '../../config';
 
 const createUser = async (payload: TAuthUser) => {
   const user = await User.isUserExist(payload?.email);
@@ -23,6 +25,7 @@ const createUser = async (payload: TAuthUser) => {
 
 const loginUser = async (payload: TAuthUser) => {
   const user = await User.isUserExist(payload?.email);
+  // console.log(user._id.toString());
   if (!user) {
     throw new AppError(httpStatus.UNAUTHORIZED, 'Invalid credentials');
   }
@@ -41,8 +44,20 @@ const loginUser = async (payload: TAuthUser) => {
     throw new AppError(httpStatus.UNAUTHORIZED, 'Invalid credentials');
   }
 
+  const jwtPayload = {
+    userEmail: user.email,
+    role: user.role,
+    id: user._id.toString(),
+  };
+
+  const token = createToken(
+    jwtPayload,
+    config.jwt_secret as string,
+    config.jwt_expire_time as string,
+  );
+
   return {
-    token: 'We will set later',
+    token,
   };
 };
 
