@@ -5,6 +5,12 @@ import { BlogControllers } from './blog.controller';
 import auth from '../../middleware/auth';
 
 const router = express.Router();
+router.patch(
+  '/:id',
+  auth(),
+  validateRequest(BlogValidation.updateBlogValidationSchema),
+  BlogControllers.updateBlog,
+);
 router.post(
   '/',
   auth(),

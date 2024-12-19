@@ -25,7 +25,7 @@ const createUser = async (payload: TAuthUser) => {
 
 const loginUser = async (payload: TAuthUser) => {
   const user = await User.isUserExist(payload?.email);
-  // console.log(user._id.toString());
+
   if (!user) {
     throw new AppError(httpStatus.UNAUTHORIZED, 'Invalid credentials');
   }
