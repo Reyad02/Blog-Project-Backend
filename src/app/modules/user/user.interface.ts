@@ -10,4 +10,5 @@ export interface TUser {
 
 export interface UserModel extends Model<TUser> {
   isUserExist(email: string): Promise<TUser>;
+  isPassMatched(plainPass: string, hashedPass: string): Promise<boolean>;
 }

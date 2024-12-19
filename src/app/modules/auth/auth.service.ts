@@ -11,7 +11,7 @@ const createUser = async (payload: TAuthUser) => {
 
   const result = await User.create(payload);
   if (!result) {
-    throw Error('Failed to create user!!!😒😒');
+    throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create user!!!😔😔');
   }
 
   return {
@@ -21,6 +21,32 @@ const createUser = async (payload: TAuthUser) => {
   };
 };
 
+const loginUser = async (payload: TAuthUser) => {
+  const user = await User.isUserExist(payload?.email);
+  if (!user) {
+    throw new AppError(httpStatus.UNAUTHORIZED, 'Invalid credentials');
+  }
+
+  const isUserBlocked = user?.isBlock;
+  if (isUserBlocked) {
+    throw new AppError(httpStatus.UNAUTHORIZED, 'Invalid credentials');
+  }
+
+  const isPassMatched = await User.isPassMatched(
+    payload?.password,
+    user?.password,
+  );
+
+  if (!isPassMatched) {
+    throw new AppError(httpStatus.UNAUTHORIZED, 'Invalid credentials');
+  }
+
+  return {
+    token: 'We will set later',
+  };
+};
+
 export const AuthServices = {
   createUser,
+  loginUser,
 };
