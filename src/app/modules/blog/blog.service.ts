@@ -26,8 +26,8 @@ const updateBlog = async (
     );
   }
   const loggedInUserId = loggedInUser.id;
-  const contentWriter = await Blog.findById(blogId);
-  if (loggedInUserId !== contentWriter?.author?.toString()) {
+  const content = await Blog.findById(blogId);
+  if (loggedInUserId !== content?.author?.toString()) {
     throw new AppError(httpStatus.BAD_REQUEST, 'This is not your content!!!');
   }
 
@@ -38,7 +38,29 @@ const updateBlog = async (
   return result;
 };
 
+const deleteBlog = async (blogId: string, loggedInUser: JwtPayload) => {
+  const loggedInUserId = loggedInUser.id;
+  const content = await Blog.findById(blogId);
+  if (!content) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Blog post not found');
+  }
+  if (
+    loggedInUserId === content?.author?.toString() ||
+    loggedInUser.role === 'admin'
+  ) {
+    const result = await Blog.findByIdAndDelete(blogId, { new: true })
+      .populate('author')
+      .select('_id title content author ');
+    console.log(result);
+
+    return result;
+  } else {
+    throw new AppError(httpStatus.BAD_REQUEST, 'This is not your content!!!');
+  }
+};
+
 export const BlogServices = {
   createBlog,
   updateBlog,
+  deleteBlog,
 };
