@@ -4,7 +4,6 @@ import { TBlog } from './blog.interface';
 import { Blog } from './blog.model';
 import { JwtPayload } from 'jsonwebtoken';
 import QueryBuilder from '../../QueryBuilder/QueryBuilder';
-import { query } from 'express';
 import { BlogSearchableFields } from './blog.constant';
 
 const createBlog = async (payload: TBlog, loggedInUser: JwtPayload) => {
@@ -69,7 +68,8 @@ const deleteBlog = async (blogId: string, loggedInUser: JwtPayload) => {
 const getAllBlogs = async (query: Record<string, unknown>) => {
   const allBlogsQuery = new QueryBuilder(Blog.find(), query)
     .search(BlogSearchableFields)
-    .filter().sort();
+    .filter()
+    .sort();
   const result = await allBlogsQuery.modelQuery;
 
   return result;
