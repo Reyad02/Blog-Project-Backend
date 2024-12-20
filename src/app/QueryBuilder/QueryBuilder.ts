@@ -27,6 +27,17 @@ class QueryBuilder<T> {
     this.modelQuery = this.modelQuery.find(queryObj).populate('author');
     return this;
   }
+
+  sort() {
+    const sortOrder = this?.query?.sortOrder || 'asc';
+    let sortBy = this?.query?.sortBy || 'createdAt';
+    if (sortOrder === 'desc') {
+      sortBy = '-' + sortBy;
+    }
+    this.modelQuery = this.modelQuery.sort(sortBy as string);
+
+    return this;
+  }
 }
 
 export default QueryBuilder;
