@@ -1,19 +1,26 @@
 import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
-import sendResponse from '../../utils/sendResponse';
 import { AdminServices } from './admin.service';
 
-const deleteBlog = catchAsync(async (req, res) => {
-
-  const result = await AdminServices.deleteBlog(req?.params?.id, req.user);
-  sendResponse(res, {
+const blockUser = catchAsync(async (req, res) => {
+  await AdminServices.blockUser(req?.params?.userId, req.user);
+  res.status(httpStatus.OK).json({
     success: true,
-    message: 'Blog Deleted successfully!!! 😊🎉',
+    message: 'User blocked successfully!!! 😊🎉',
     statusCode: httpStatus.OK,
-    data: result,
+  });
+});
+
+const deleteBlog = catchAsync(async (req, res) => {
+  await AdminServices.deleteBlog(req?.params?.id, req.user);
+  res.status(httpStatus.OK).json({
+    success: true,
+    message: 'Blog deleted successfully!!! 😊🎉',
+    statusCode: httpStatus.OK,
   });
 });
 
 export const AdminControllers = {
   deleteBlog,
+  blockUser,
 };

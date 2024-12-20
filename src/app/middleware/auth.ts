@@ -20,7 +20,7 @@ const auth = () => {
 
     const decodedItem = jwt.verify(token, config.jwt_secret as string);
     const { userEmail } = decodedItem as JwtPayload;
-    // console.log(decodedItem);
+
     const user = await User.findOne({ email: userEmail });
     if (!user) {
       throw new AppError(httpStatus.NOT_FOUND, 'User not found!!!');

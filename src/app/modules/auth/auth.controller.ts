@@ -7,7 +7,7 @@ const createUser = catchAsync(async (req, res) => {
   const result = await AuthServices.createUser(req.body);
   sendResponse(res, {
     success: true,
-    message: 'User created successfully!!! 😊🎉',
+    message: 'User registered successfully!!! 😊🎉',
     statusCode: httpStatus.CREATED,
     data: result,
   });
@@ -17,7 +17,7 @@ const loginUser = catchAsync(async (req, res) => {
   const result = await AuthServices.loginUser(req.body);
   sendResponse(res, {
     success: true,
-    message: 'Login Successful!!! 😊🎉',
+    message: 'Login successful!!! 😊🎉',
     statusCode: httpStatus.OK,
     data: result,
   });

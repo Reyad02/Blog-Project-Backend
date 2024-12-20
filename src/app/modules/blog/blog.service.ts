@@ -21,12 +21,6 @@ const updateBlog = async (
   payload: Partial<TBlog>,
   loggedInUser: JwtPayload,
 ) => {
-  if (loggedInUser.role === 'admin') {
-    throw new AppError(
-      httpStatus.BAD_REQUEST,
-      'You are not allow to update!!!',
-    );
-  }
   const loggedInUserId = loggedInUser.id;
   const content = await Blog.findById(blogId);
 
@@ -55,9 +49,7 @@ const deleteBlog = async (blogId: string, loggedInUser: JwtPayload) => {
     loggedInUserId === content?.author?.toString() &&
     loggedInUser.role === 'user'
   ) {
-    const result = await Blog.findByIdAndDelete(blogId, { new: true })
-      .populate('author')
-      .select('_id title content author ');
+    const result = await Blog.findByIdAndDelete(blogId, { new: true });
 
     return result;
   } else {
