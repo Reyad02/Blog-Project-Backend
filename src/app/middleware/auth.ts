@@ -19,7 +19,7 @@ const auth = () => {
     }
 
     const decodedItem = jwt.verify(token, config.jwt_secret as string);
-    const { userEmail, role, id } = decodedItem as JwtPayload;
+    const { userEmail } = decodedItem as JwtPayload;
     // console.log(decodedItem);
     const user = await User.findOne({ email: userEmail });
     if (!user) {
@@ -31,7 +31,6 @@ const auth = () => {
     }
 
     req.user = decodedItem as JwtPayload;
-    req.body.author = id;
 
     next();
   });
