@@ -3,6 +3,9 @@ import AppError from '../../errors/AppErros';
 import { TBlog } from './blog.interface';
 import { Blog } from './blog.model';
 import { JwtPayload } from 'jsonwebtoken';
+import QueryBuilder from '../../QueryBuilder/QueryBuilder';
+import { query } from 'express';
+import { BlogSearchableFields } from './blog.constant';
 
 const createBlog = async (payload: TBlog, loggedInUser: JwtPayload) => {
   payload.author = loggedInUser.id;
@@ -27,6 +30,11 @@ const updateBlog = async (
   }
   const loggedInUserId = loggedInUser.id;
   const content = await Blog.findById(blogId);
+
+  if (!content) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Blog post not found');
+  }
+
   if (loggedInUserId !== content?.author?.toString()) {
     throw new AppError(httpStatus.BAD_REQUEST, 'This is not your content!!!');
   }
@@ -45,13 +53,12 @@ const deleteBlog = async (blogId: string, loggedInUser: JwtPayload) => {
     throw new AppError(httpStatus.NOT_FOUND, 'Blog post not found');
   }
   if (
-    loggedInUserId === content?.author?.toString() ||
-    loggedInUser.role === 'admin'
+    loggedInUserId === content?.author?.toString() &&
+    loggedInUser.role === 'user'
   ) {
     const result = await Blog.findByIdAndDelete(blogId, { new: true })
       .populate('author')
       .select('_id title content author ');
-    console.log(result);
 
     return result;
   } else {
@@ -59,8 +66,18 @@ const deleteBlog = async (blogId: string, loggedInUser: JwtPayload) => {
   }
 };
 
+const getAllBlogs = async (query: Record<string, unknown>) => {
+  const allBlogsQuery = new QueryBuilder(Blog.find(), query)
+    .search(BlogSearchableFields)
+    .filter();
+  const result = await allBlogsQuery.modelQuery;
+
+  return result;
+};
+
 export const BlogServices = {
   createBlog,
   updateBlog,
   deleteBlog,
+  getAllBlogs,
 };
