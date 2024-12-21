@@ -35,6 +35,35 @@ Authorization:
 - Node.js
 - Express.js
 - MongoDB with Mongoose
+
+
+## Installation and Setup   
+
+1. **Clone the Repository**  
+   ```bash
+   git clone https://github.com/Reyad02/Blog-Project-Backend.git
+   cd Blog-Project-Backend
+   ```
+
+2. **Install Dependencies**
+  ```bash
+  npm install
+   ```
+
+
+3. **Set Up Environment Variables**
+   ```env
+   NODE_ENV=development/production
+   PORT=port number
+   DATABASE_URI=your MongoDB connection string
+   SALT_ROUNDS=number of salt rounds for password hashing
+   JWT_SECRET=secret key for signing JWT tokens
+   EXPIRE_TIME=token expiration time (e.g., 1h, 7d)
+  
+4. **Start the Application**
+   ```bash
+   npm run dev  
+   ```
     
  
 ## API Endpoints
