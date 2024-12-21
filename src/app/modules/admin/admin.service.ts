@@ -18,7 +18,7 @@ const blockUser = async (userId: string, loggedInUser: JwtPayload) => {
     loggedInUserId !== admin?._id.toString() ||
     loggedInUser.role !== admin?.role
   ) {
-    throw new AppError(httpStatus.BAD_REQUEST, 'You are not admin!!!');
+    throw new AppError(httpStatus.UNAUTHORIZED, 'AUTHORIZATION_ERROR');
   }
 
   const result = await User.findByIdAndUpdate(
@@ -44,7 +44,7 @@ const deleteBlog = async (blogId: string, loggedInUser: JwtPayload) => {
     loggedInUserId !== admin?._id.toString() ||
     loggedInUser.role !== admin?.role
   ) {
-    throw new AppError(httpStatus.BAD_REQUEST, 'You are not admin!!!');
+    throw new AppError(httpStatus.UNAUTHORIZED, 'AUTHORIZATION_ERROR');
   }
 
   const result = await Blog.findByIdAndDelete(blogId, { new: true })

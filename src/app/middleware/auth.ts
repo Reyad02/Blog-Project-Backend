@@ -12,10 +12,7 @@ const auth = () => {
     const token = bearerToken?.split(' ')[1];
 
     if (!token) {
-      throw new AppError(
-        httpStatus.UNAUTHORIZED,
-        "You're not authorized!!!🤬🤬",
-      );
+      throw new AppError(httpStatus.UNAUTHORIZED, 'AUTH_ERROR');
     }
 
     const decodedItem = jwt.verify(token, config.jwt_secret as string);
@@ -23,7 +20,7 @@ const auth = () => {
 
     const user = await User.findOne({ email: userEmail });
     if (!user) {
-      throw new AppError(httpStatus.NOT_FOUND, 'User not found!!!');
+      throw new AppError(httpStatus.UNAUTHORIZED, 'AUTH_ERROR');
     }
 
     if (user.isBlock) {
