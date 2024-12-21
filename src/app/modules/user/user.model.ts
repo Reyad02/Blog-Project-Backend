@@ -5,7 +5,6 @@ import config from '../../config';
 
 const userSchema = new Schema<TUser, UserModel>(
   {
-    _id: {type: Schema.Types.ObjectId},
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true, select:0 },
@@ -33,7 +32,7 @@ userSchema.pre('save', async function (next) {
 });
 
 // check user exist or not
-userSchema.statics.isUserExist = async function (email: string) {
+userSchema.statics.isUserExist = async function (email: string): Promise<TUser | null> {
   return await User.findOne({ email: email }).select("+password");
 };
 

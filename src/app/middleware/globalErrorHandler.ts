@@ -6,8 +6,8 @@ import handleValidationError from '../errors/handleValidationError';
 import httpStatus from 'http-status';
 
 const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
-  let statusCode = httpStatus.INTERNAL_SERVER_ERROR as number;
-  let message = 'Something went wrong';
+  let statusCode = err?.statusCode || httpStatus.INTERNAL_SERVER_ERROR as number;
+  let message = err?.message || 'Something went wrong';
   let errors: TError = [
     {
       path: '',
