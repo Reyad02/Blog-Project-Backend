@@ -1,4 +1,4 @@
-#  Blog Project
+#  Blog Project Backend
 
 ## Features and Requirements
 
