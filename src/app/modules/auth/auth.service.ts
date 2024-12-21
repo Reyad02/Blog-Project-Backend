@@ -4,6 +4,7 @@ import { User } from '../user/user.model';
 import { TAuthUser } from './auth.interface';
 import { createToken } from './auth.utils';
 import config from '../../config';
+import { Types } from 'mongoose';
 
 const createUser = async (payload: TAuthUser) => {
   const user = await User.isUserExist(payload?.email);
@@ -47,7 +48,7 @@ const loginUser = async (payload: TAuthUser) => {
   const jwtPayload = {
     userEmail: user.email,
     role: user.role,
-    id: user._id.toString(),
+    id: (user._id as Types.ObjectId).toString(),
   };
 
   const token = createToken(

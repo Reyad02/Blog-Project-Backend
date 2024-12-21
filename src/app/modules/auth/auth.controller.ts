@@ -25,5 +25,5 @@ const loginUser = catchAsync(async (req, res) => {
 
 export const AuthController = {
   createUser,
-  loginUser
+  loginUser,
 };

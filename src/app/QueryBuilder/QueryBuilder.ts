@@ -24,7 +24,9 @@ class QueryBuilder<T> {
     const queryObj = { ...this.query };
     const excludeFields = ['search', 'sortBy', 'sortOrder'];
     excludeFields.forEach((element) => delete queryObj[element]);
-    this.modelQuery = this.modelQuery.find({author: queryObj.filter}).populate('author');
+    this.modelQuery = this.modelQuery
+      .find({ author: queryObj.filter })
+      .populate('author');
     return this;
   }
 

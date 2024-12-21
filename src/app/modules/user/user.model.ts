@@ -5,9 +5,10 @@ import config from '../../config';
 
 const userSchema = new Schema<TUser, UserModel>(
   {
+    _id: {type: Schema.Types.ObjectId},
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    password: { type: String, required: true, select:0 },
     role: {
       type: String,
       enum: ['admin', 'user'],
@@ -33,12 +34,15 @@ userSchema.pre('save', async function (next) {
 
 // check user exist or not
 userSchema.statics.isUserExist = async function (email: string) {
-  return await User.findOne({ email: email });
+  return await User.findOne({ email: email }).select("+password");
 };
 
 // password matching
-userSchema.statics.isPassMatched = async function (plainPass:string, hashedPass: string) {
-  return await bcrypt.compare(plainPass,hashedPass)
-}
+userSchema.statics.isPassMatched = async function (
+  plainPass: string,
+  hashedPass: string,
+) {
+  return await bcrypt.compare(plainPass, hashedPass);
+};
 
 export const User = model<TUser, UserModel>('User', userSchema);

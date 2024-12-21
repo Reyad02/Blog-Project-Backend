@@ -10,8 +10,8 @@ const handleZodError = (err: ZodError): TGenericError => {
     };
   });
   const errorMsgs = err?.issues
-  .map((issue: ZodIssue) => issue.message)
-  .join(', ');
+    .map((issue: ZodIssue) => issue.message)
+    .join(', ');
   const statusCode = httpStatus.BAD_REQUEST;
   return {
     statusCode,
