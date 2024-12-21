@@ -27,7 +27,6 @@ class QueryBuilder<T> {
     if (queryObj.filter) {
       this.modelQuery = this.modelQuery
         .find({ author: queryObj.filter })
-        .populate('author');
     }
     return this;
   }
